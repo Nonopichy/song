@@ -24,7 +24,7 @@ Class Album {
         foreach (Album::getFolderAll("albums") as $one) {
             $album = new Album($one);
             foreach (Album::getFolderAll("albums/".$one) as $two) {
-                $song = new Song($two,"albums/".$one."/".$two);
+                $song = new Song($two,"albums/".$one."/".$two, $album);
                 $album->addSong($song);
             }
             array_push($albums,$album);

@@ -1,0 +1,12 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+html{
+    background-color: black;
+    color: rgb(160, 160, 160);
+}
+.player{
+    position: absolute;
+    margin-left: 77%;
+}
