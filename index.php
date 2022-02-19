@@ -2,24 +2,6 @@
     require('song.php');
     require('album.php');
     require('mysql.php');
-
-    if(isset($_GET['search'])){
-        $sql = new MySQL("song");
-        $conn = $sql->openConnection();
-
-        $search = $conn->query("SELECT * FROM albums WHERE title in ('".$_GET['search']."') ");
-
-        if(mysqli_num_rows($search) > 0){
-            $result = mysqli_fetch_assoc($search);
-            var_dump($key);
-           /*
-            foreach ($result as $key){
-                var_dump($key);
-            }
-            */
-        }
-    
-    }
 ?>
 <html>
     <head>
@@ -47,12 +29,12 @@
         
         <div class="player">
                 <h3 id="album-now" style="text-align: center;">Title Waiting...</h1>
-                <audio id="player" autoplay controls><source src="sound_dumb.mp3" type="audio/mpeg"></audio>
+                <audio id="player" autoplay loop controls><source src="sound_dumb.mp3" type="audio/mpeg"></audio>
                 <h4 id="song-now" style="text-align: center;">Song Waiting...</h1>
          </div>
 
         <?php
-            if(!isset($_GET['search'])){
+            if(empty($_GET['search'])){
                 echo 
                 '
                 <div class="assisted" onclick="setAssisted()">
@@ -60,6 +42,17 @@
                     <h2 id="assisted-song"></h2>
                 </div>
                 ';
+            } else {
+                $sql = new MySQL("song");
+                $conn = $sql->openConnection();
+            
+                $search = $sql->getContains('*','albums','title', $_GET['search']);
+                foreach ($search as $key){
+                    $title = str_split($key['title'], 32)[0];
+                    echo '<div class="song" onclick="setSong(\''.Song::findSongTitle($key['title'])->path.'\')">'.
+                    str_replace(".mp3", "",explode('c-', $title)[0]).'...<br>> VIEWS: '.$key['views'].' ('.$key['category'].') <br><br>'
+                    .'</div>';
+                }
             }
         ?>
         
@@ -73,44 +66,42 @@
                 return xmlHttp.responseText;
             }
 
+            function setDisplaySong(info){
+                document.getElementById("album-now").innerHTML = info[1];
+                document.getElementById("song-now").innerHTML = info[2];
+                document.title = info[1]+' - '+info[2];
+            }
+            
+            function playSong(src){
+                var player = document.getElementById("player");
+                player.src = src;
+                player.play();
+            }
+
             function setAssisted(){
                 var best = requestHttp("http://localhost/song/topsong.php");
                 const info = best.split("/");
                 document.getElementById("assisted-song").innerHTML=info[2];
-                document.getElementById("album-now").innerHTML = info[1];
-                document.getElementById("song-now").innerHTML = info[2];
-                document.title = info[1]+' - '+info[2];
-                var player = document.getElementById("player");
-                player.src = best;
-                player.play();
+                setDisplaySong(info);
+                playSong(best);
             }
 
             function setSong(best){
-                const info = best.split("/");
-                document.getElementById("album-now").innerHTML = info[1];
-                document.getElementById("song-now").innerHTML = info[2];
-                document.title = info[1]+' - '+info[2];
-                var player = document.getElementById("player");
-                player.src = best;
-                player.play();
+                requestHttp("http://localhost/song/view.php?song="+best);
+                setDisplaySong(best.split("/"));
+                playSong(best);
             }
 
             player.addEventListener("ended",function() {
                 var request = requestHttp("http://localhost/song/randomsong.php");
-                const info = request.split("/");
-                document.getElementById("album-now").innerHTML = info[1];
-                document.getElementById("song-now").innerHTML = info[2];
-                document.title = info[1]+' - '+info[2];
-                this.src = request;
-                this.play();
+                setDisplaySong(request.split("/"));
+                playSong(request);
             });
         </script>
     
         <?php
-            if(!isset($_GET['search'])){
-                echo `
-                <br>
-                <h3>As 10 mais ouvidas:</h3>`;
+            if(empty($_GET['search'])){
+                echo `<br><h3>As 10 mais ouvidas:</h3><br>`;
                 Song::showTo(10);
              }
         ?>

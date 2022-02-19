@@ -16,15 +16,18 @@ Class Song {
         $songs = $album->songs;
         return $songs[rand(0,sizeof($songs) - 1)];
     }
-    public static function findSongTitle($title){
+    public static function findSong($find, $type){
         $albums = Album::getAllAlbum();
         foreach ($albums as $one){
             foreach ($one->songs as $two){
-                if($two->name == $title)
+                if($two->$type == $find)
                     return $two;
             }
         }
         return null;
+    }
+    public static function findSongTitle($title){
+        return Song::findSong($title, 'name');
     }
     public static function showTo($limit){
         $sql = new MySQL("song");
@@ -37,6 +40,18 @@ Class Song {
             $top.'. '.str_replace(".mp3", "",explode('c-', $title)[0]).'...<br>> VIEWS: '.$key['views'].' ('.$key['category'].') <br><br>'
             .'</div>';
             $top++;
+        }
+    }
+    public static function addView($conn, $song){
+        $title = mysqli_escape_string($conn,$song->name);
+        $search = $conn->query("SELECT `views` FROM `albums` WHERE title='".$title."'");
+        if (mysqli_num_rows($search) > 0) {
+            $views = intval(mysqli_fetch_assoc($search)['views']) + 1;
+            $conn->query( "UPDATE `albums` SET `views`='".$views."' WHERE `title`='".$title."'");
+            echo 'update';
+        } else{
+            $conn->query("INSERT INTO `albums`(`title`, `views`,`category`) VALUES ('".$title."','0','".$song->category."')");
+            echo 'create';
         }
     }
 }
