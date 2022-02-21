@@ -29,7 +29,7 @@
         
         <div class="player">
                 <h3 id="album-now" style="text-align: center;">Title Waiting...</h1>
-                <audio id="player" autoplay loop controls><source src="sound_dumb.mp3" type="audio/mpeg"></audio>
+                <audio id="player" autoplay controls><source src="sound_dumb.mp3" type="audio/mpeg"></audio>
                 <h4 id="song-now" style="text-align: center;">Song Waiting...</h1>
          </div>
 
@@ -49,7 +49,7 @@
                 $search = $sql->getContains('*','albums','title', $_GET['search']);
                 foreach ($search as $key){
                     $title = str_split($key['title'], 32)[0];
-                    echo '<div class="song" onclick="setSong(\''.Song::findSongTitle($key['title'])->path.'\')">'.
+                    echo '<div class="song" onclick="setSongSingle(\''.Song::findSongTitle($key['title'])->path.'\')">'.
                     str_replace(".mp3", "",explode('c-', $title)[0]).'...<br>> VIEWS: '.$key['views'].' ('.$key['category'].') <br><br>'
                     .'</div>';
                 }
@@ -57,8 +57,25 @@
         ?>
         
         <script>
+             document.cookie = "loop=false";
             document.getElementById("assisted-song").innerHTML=requestHttp("http://localhost/song/topsong.php").split("/")[2];
             
+            function getCookie(cname) {
+                let name = cname + "=";
+                let decodedCookie = decodeURIComponent(document.cookie);
+                let ca = decodedCookie.split(';');
+                for(let i = 0; i <ca.length; i++) {
+                    let c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+            }
+
             function requestHttp(theUrl){
                 var xmlHttp = new XMLHttpRequest();
                 xmlHttp.open("GET", theUrl, false);
@@ -92,10 +109,18 @@
                 playSong(best);
             }
 
+            function setSongSingle(best){
+                document.cookie = "loop=true";
+                setSong(best);
+            }
+
             player.addEventListener("ended",function() {
-                var request = requestHttp("http://localhost/song/randomsong.php");
-                setDisplaySong(request.split("/"));
-                playSong(request);
+                if(getCookie('loop')=="false"){
+                    var request = requestHttp("http://localhost/song/randomsong.php");
+                    setSong(request);
+                } else {
+                    this.play();
+                }
             });
         </script>
     
