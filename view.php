@@ -14,7 +14,6 @@ if($song == null)
 
 $sql = new MySQL("song");
 $conn = $sql->openConnection();
-Song::addView($conn, $song);
-echo 'hioh';
+Song::addView($conn, $song,true);
 
 ?>

@@ -20,12 +20,15 @@ Class Album {
         return $list;
     }
     public static function getAllAlbum(){
+        $sql = new MySQL("song");
+        $conn = $sql->openConnection();
         $albums = array();
         foreach (Album::getFolderAll("albums") as $one) {
             $album = new Album($one);
             foreach (Album::getFolderAll("albums/".$one) as $two) {
                 $song = new Song($two,"albums/".$one."/".$two, $album);
                 $album->addSong($song);
+                Song::addView($conn, $song, false);
             }
             array_push($albums,$album);
         }

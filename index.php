@@ -45,12 +45,18 @@
             } else {
                 $sql = new MySQL("song");
                 $conn = $sql->openConnection();
-            
+                $albums = array();
                 $search = $sql->getContains('*','albums','title', $_GET['search']);
                 foreach ($search as $key){
+                    $song = Song::findSongTitle($key['title']);
+                    $album = $song->album->name;
+                    if(!in_array($album, $albums, false)){
+                        array_push($albums,$album);
+                        echo '<div class="album">'.$album.'</div>';
+                    }
                     $title = str_split($key['title'], 32)[0];
-                    echo '<div class="song" onclick="setSongSingle(\''.Song::findSongTitle($key['title'])->path.'\')">'.
-                    str_replace(".mp3", "",explode('c-', $title)[0]).'...<br>> VIEWS: '.$key['views'].' ('.$key['category'].') <br><br>'
+                    echo '<div class="song" onclick="setSongSingle(\''.Song::findSongTitle($key['title'])->path.'\')">&#160&#160&#160'.
+                    str_replace(".mp3", "",explode('c-', $title)[0]).'...<br>&#160&#160&#160> VIEWS: '.$key['views'].' ('.$key['category'].') <br><br>'
                     .'</div>';
                 }
             }
@@ -103,8 +109,16 @@
                 playSong(best);
             }
 
-            function setSong(best){
+            function addView(best){
                 requestHttp("http://localhost/song/view.php?song="+best);
+            }
+
+            function setSong(best){
+                addView(best);
+                setDisplaySong(best.split("/"));
+                playSong(best);
+            }
+            function setSongNoView(best){
                 setDisplaySong(best.split("/"));
                 playSong(best);
             }
@@ -117,7 +131,7 @@
             player.addEventListener("ended",function() {
                 if(getCookie('loop')=="false"){
                     var request = requestHttp("http://localhost/song/randomsong.php");
-                    setSong(request);
+                    setSongNoView(request);
                 } else {
                     this.play();
                 }

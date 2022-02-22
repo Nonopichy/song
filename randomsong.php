@@ -6,5 +6,5 @@ $song = Song::getRandomAlbumSong();
 echo $song->path;
 $sql = new MySQL("song");
 $conn = $sql->openConnection();
-Song::addView($conn, $song);
+Song::addView($conn, $song, true);
 ?>

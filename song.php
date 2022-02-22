@@ -42,12 +42,14 @@ Class Song {
             $top++;
         }
     }
-    public static function addView($conn, $song){
+    public static function addView($conn, $song, $addview){
         $title = mysqli_escape_string($conn,$song->name);
         $search = $conn->query("SELECT `views` FROM `albums` WHERE title='".$title."'");
         if (mysqli_num_rows($search) > 0) {
-            $views = intval(mysqli_fetch_assoc($search)['views']) + 1;
-            $conn->query( "UPDATE `albums` SET `views`='".$views."' WHERE `title`='".$title."'");
+            if($addview){
+                $views = intval(mysqli_fetch_assoc($search)['views']) + 1;
+                $conn->query( "UPDATE `albums` SET `views`='".$views."' WHERE `title`='".$title."'");
+            }
         } else{
             $conn->query("INSERT INTO `albums`(`title`, `views`,`category`) VALUES ('".$title."','0','".$song->category."')");
         }
