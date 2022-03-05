@@ -51,7 +51,7 @@ Class Song {
                 $conn->query( "UPDATE `albums` SET `views`='".$views."' WHERE `title`='".$title."'");
             }
         } else{
-            $conn->query("INSERT INTO `albums`(`title`, `views`,`category`) VALUES ('".$title."','0','".$song->category."')");
+            $conn->query("INSERT INTO `albums`(`title`, `views`,`category`,`album`) VALUES ('".$title."','0','".$song->category."','".$song->album->name."')");
         }
     }
 }

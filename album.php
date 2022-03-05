@@ -34,5 +34,13 @@ Class Album {
         }
         return $albums;
     }
+    public static function findAlbum($find, $type){
+        $albums = Album::getAllAlbum();
+        foreach ($albums as $one){
+            if($one->$type == $find)
+                return $one;
+        }
+        return null;
+    }
 }
 ?>
