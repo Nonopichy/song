@@ -69,31 +69,11 @@
                 foreach ($search as $key){
                     $song = Song::findSongTitle($key['title']);
                     $album = $song->album->name;
-
-                    
                     $title = str_split($key['title'], 32)[0];
                     echo '<div class="song" onclick="setSongSingle(\''.Song::findSongTitle($key['title'])->path.'\')">&#160&#160&#160 <a href="http://localhost/song/?album='.$album.'" class="album">'.$album.'</a>&#160-&#160'.
                     str_replace(".mp3", "",explode('c-', $title)[0]).'...<br>&#160&#160&#160> VIEWS: '.$key['views'].' ('.$key['category'].') <br><br>'
                     .'</div>';
                 }
-                /*
-                $sql = new MySQL("song");
-                $conn = $sql->openConnection();
-                $albums = array();
-                $search = $sql->getContains('*','albums','title', $_GET['search']);
-                foreach ($search as $key){
-                    $song = Song::findSongTitle($key['title']);
-                    $album = $song->album->name;
-                    if(!in_array($album, $albums, false)){
-                        array_push($albums,$album);
-                        echo '<div class="album">'.$album.'</div>';
-                    }
-                    $title = str_split($key['title'], 32)[0];
-                    echo '<div class="song" onclick="setSongSingle(\''.Song::findSongTitle($key['title'])->path.'\')">&#160&#160&#160'.
-                    str_replace(".mp3", "",explode('c-', $title)[0]).'...<br>&#160&#160&#160> VIEWS: '.$key['views'].' ('.$key['category'].') <br><br>'
-                    .'</div>';
-                }
-                */
             }
         ?>
         
