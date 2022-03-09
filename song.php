@@ -3,12 +3,14 @@ Class Song {
     public $name;
     public $path;
     public $album;
-    function __construct($name, $path, $album) {
+    public $image;
+    function __construct($name, $path, $album, $image) {
         $this->name = $name;
         $this->path = $path;
         $this->album = $album;
         @$category = str_replace(".mp3", "",explode('c-', $this->name)[1]);
         $this->category = $category;
+        $this->image = $image;
     }
     public static function getRandomAlbumSong(){
         $albums = Album::getAllAlbum();
@@ -20,7 +22,7 @@ Class Song {
         $albums = Album::getAllAlbum();
         foreach ($albums as $one){
             foreach ($one->songs as $two){
-                if($two->$type == $find)
+                if($two->$type == $find || strpos($two->$type, $find))
                     return $two;
             }
         }
@@ -30,9 +32,7 @@ Class Song {
         return Song::findSong($title, 'name');
     }
     public static function showTo($limit){
-        $sql = new MySQL("song");
-        $conn = $sql->openConnection();
-        $search = $conn->query("SELECT * FROM albums ORDER BY views DESC LIMIT ".$limit);
+        $search = Song::orderSong($limit);
         $top = 1;
         foreach ($search as $key){
             $title = str_split($key['title'], 32)[0];
@@ -41,6 +41,12 @@ Class Song {
             .'</div>';
             $top++;
         }
+    }
+    public static function orderSong($limit){
+        $sql = new MySQL("song");
+        $conn = $sql->openConnection();
+        return $conn->query("SELECT * FROM albums ORDER BY views DESC LIMIT ".$limit);
+
     }
     public static function addView($conn, $song, $addview){
         $title = mysqli_escape_string($conn,$song->name);
@@ -51,7 +57,7 @@ Class Song {
                 $conn->query( "UPDATE `albums` SET `views`='".$views."' WHERE `title`='".$title."'");
             }
         } else{
-            $conn->query("INSERT INTO `albums`(`title`, `views`,`category`,`album`) VALUES ('".$title."','0','".$song->category."','".$song->album->name."')");
+            $conn->query("INSERT INTO `albums`(`title`, `views`,`category`,`album`) VALUES ('".$title."','0','".strtoupper($song->category)."','".$song->album->name."')");
         }
     }
 }
