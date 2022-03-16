@@ -32,77 +32,8 @@
             text-align: right;
         }
         </style>
-        <script>
-            document.cookie = "loop=false";
-            document.getElementById("assisted-song").innerHTML=requestHttp("http://localhost/song/topsong.php").split("/")[2];
-            function getCookie(cname) {
-                let name = cname + "=";
-                let decodedCookie = decodeURIComponent(document.cookie);
-                let ca = decodedCookie.split(';');
-                for(let i = 0; i <ca.length; i++) {
-                    let c = ca[i];
-                    while (c.charAt(0) == ' ') {
-                    c = c.substring(1);
-                    }
-                    if (c.indexOf(name) == 0) {
-                    return c.substring(name.length, c.length);
-                    }
-                }
-                return "";
-            }
-
-            function requestHttp(theUrl){
-                var xmlHttp = new XMLHttpRequest();
-                xmlHttp.open("GET", theUrl, false);
-                xmlHttp.send(null);
-                return xmlHttp.responseText;
-            }
-
-            function setDisplaySong(info){
-                document.getElementById("album-now").innerHTML = info[1];
-                document.getElementById("song-now").innerHTML = info[2];
-                document.title = info[1]+' - '+info[2];
-            }
-            
-            function playSong(src){
-                var player = document.getElementById("player");
-                player.src = src;
-                player.play();
-            }
-
-            function setAssisted(){
-                var best = requestHttp("http://localhost/song/topsong.php");
-                const info = best.split("/");
-                document.getElementById("assisted-song").innerHTML=info[2];
-                setDisplaySong(info);
-                playSong(best);
-            }
-
-            function addView(best){
-                requestHttp("http://localhost/song/view.php?song="+best);
-            }
-
-            function setSong(best){
-                addView(best);
-                setDisplaySong(best.split("/"));
-                playSong(best);
-            }
-
-            function setSongNoView(best){
-                setDisplaySong(best.split("/"));
-                playSong(best);
-            }
-
-            function setSongSingle(best){
-                document.cookie = "loop=true";
-                setSong(best);
-            }
-
-            function changePage(link){
-                window.location.href = link;
-            }
-
-        </script>
+        <script type="text/javascript" src="js/internal.js"></script>
+       
     <!--navbar-->
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -356,21 +287,11 @@
 
     <div class="player" style="background-color: rgba(0,0,0,90); color: gray;  top:79%;left:78%; position: fixed; border-radius: 10%;">
         <h3 id="album-now" style="text-align: center;">Comece!</h1>
-        <audio id="player" autoplay controls><source src="assets/sound/sound_dumb.mp3" type="audio/mpeg"></audio>
+        <audio id="player" autoplay controls><source id="player-src"src="assets/sounds/sound_dumb.mp3" type="audio/mpeg"></audio>
         <h4 id="song-now" style="text-align: center;">P. Música Aleatoria</h1>
     </div>
 
     <script src="/docs/5.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script>
-        player.addEventListener("ended",function() {
-            if(getCookie('loop')=="false"){
-                var request = requestHttp("http://localhost/song/randomsong.php");
-                setSongNoView(request);
-            } else {
-                this.play();
-            }
-        });
-    </script>
-
+    <script type="text/javascript" src="js/internal-footer.js"></script>
     </body>
 </html>
