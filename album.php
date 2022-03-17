@@ -23,6 +23,9 @@ Class Album {
         }
         return $list;
     }
+    /*
+     * Obter todos albums / musicas e definira algumas propriedades dentro do banco de dados.
+     */
     public static function getAllAlbum(){
         $sql = new MySQL("song");
         $conn = $sql->openConnection();
@@ -33,16 +36,15 @@ Class Album {
                 $album->setImage("albums/".$one."/"."!.png");
             }
             foreach (Album::getFolderAll("albums/".$one) as $two) {
-                 if(!(strpos($two,".png")!== false)){
-                $image = "albums/".$one."/".substr($two, 0, -4). '.png';
-                if(file_exists($image))
-                    $song = new Song($two,"albums/".$one."/".$two, $album, $image);
-                else
-                    $song = new Song($two,"albums/".$one."/".$two, $album, null);
-                $album->addSong($song);
-                Song::addView($conn, $song, false);
-                 }
-
+                if(!(strpos($two,".png")!== false)){
+                    $image = "albums/".$one."/".substr($two, 0, -4). '.png';
+                    if(file_exists($image))
+                        $song = new Song($two,"albums/".$one."/".$two, $album, $image);
+                    else
+                        $song = new Song($two,"albums/".$one."/".$two, $album, null);
+                    $album->addSong($song);
+                    Song::addView($conn, $song, false);
+                }
             }
             array_push($albums,$album);
         }
