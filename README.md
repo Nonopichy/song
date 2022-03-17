@@ -19,6 +19,7 @@
 - Sistema de upload.
 - Verificar validade(!= null) da lista entregue do banco de dados.
 - Melhoria no front-end.
+- Anotações.
 > Sem essa verificação ocorre o erro que o banco de dados tenta exibir valores de uma array list nula.
 ## Imagens:
 ![image](https://user-images.githubusercontent.com/68911691/157358775-8994ff5d-d716-4dc5-af20-56f95b2aec8a.png)
