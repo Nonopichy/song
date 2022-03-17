@@ -15,7 +15,7 @@
 - Orientação objeto back-end, ~obsoleto~.
 ## Future Features:
 - Parar com o excesso de processamento de albums/musicas sem utilizar banco de dados.
-> https://github.com/Nonopichy/song/blob/97721958712cd5be38eee3c347b34e70719b425e/album.php#L26-L50
+> https://github.com/Nonopichy/song/blob/97721958712cd5be38eee3c347b34e70719b425e/album.php#L23-L50
 - Sistema de upload.
 - Verificar validade(!= null) da lista entregue do banco de dados.
 - Melhoria no front-end.
