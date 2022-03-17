@@ -1,5 +1,4 @@
 # Song (GeekZone)
-## Site que tem como seu objetivo apresentar albums, reproduzir musicas, de maneira simples, rápida e funcional.
 ## Features:
 - Reprodução aleatória.
 - Autoreprodução.
