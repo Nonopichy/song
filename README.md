@@ -9,11 +9,11 @@
 - Contagem de visualizações.
 - Somente (.mp3).
 - Página para album.
-- Campo de pesquisa para albums e musicas.
+- Campo de pesquisa para albuns e musicas.
 - Continuidade de reprodução se utilizando cookies.
 - Orientação objeto back-end, ~obsoleto~.
 ## Future Features:
-- Parar com o excesso de processamento de albums/musicas sem utilizar banco de dados.
+- Parar com o excesso de processamento de albuns/musicas sem utilizar banco de dados.
 > https://github.com/Nonopichy/song/blob/97721958712cd5be38eee3c347b34e70719b425e/album.php#L26-L52
 - Sistema de upload.
 - Verificar validade(!= null) da lista entregue do banco de dados.
