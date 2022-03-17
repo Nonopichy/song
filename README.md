@@ -18,6 +18,7 @@
 > https://github.com/Nonopichy/song/blob/97721958712cd5be38eee3c347b34e70719b425e/album.php#L26-L50
 - Sistema de upload.
 - Verificar validade(!= null) da lista entregue do banco de dados.
+- Melhoria no front-end.
 > Sem essa verificação ocorre o erro que o banco de dados tenta exibir valores de uma array list nula.
 ## Imagens:
 ![image](https://user-images.githubusercontent.com/68911691/157358775-8994ff5d-d716-4dc5-af20-56f95b2aec8a.png)
