@@ -24,7 +24,7 @@ Class Album {
         return $list;
     }
     /*
-     * Obter todos albums / musicas e definira algumas propriedades dentro do banco de dados.
+     * Obter todos os albums / musicas e definira algumas propriedades dentro do banco de dados.
      */
     public static function getAllAlbum(){
         $sql = new MySQL("song");
