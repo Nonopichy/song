@@ -1,4 +1,5 @@
 # Song (GeekZone)
+- I know it's messy or not so efficient...
 ## Features:
 - Reprodução aleatória.
 - Autoreprodução.
